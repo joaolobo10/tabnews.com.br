@@ -22,16 +22,24 @@ export default function PastTime({ date, formatText, ...props }) {
   }, [date]);
 
   function getText(date) {
-    try {
-      const formattedDate = formatDistanceToNowStrict(new Date(date), {
-        locale: ptBR,
-      });
+  try {
+    const postDate = new Date(date);
+    const now = new Date();
 
-      return formatText ? formatText(formattedDate) : `${formattedDate} atrás`;
-    } catch (e) {
-      return '';
+    // Se a data do post for no futuro, retorna "agora mesmo"
+    if (postDate > now) {
+      return 'agora mesmo';
     }
+
+    const formattedDate = formatDistanceToNowStrict(postDate, {
+      locale: ptBR,
+    });
+
+    return formatText ? formatText(formattedDate) : `${formattedDate} atrás`;
+  } catch (e) {
+    return '';
   }
+}
 
   return (
     <Tooltip text={tooltipLabel} suppressHydrationWarning {...props}>
